@@ -21,8 +21,9 @@ export default function FormularioObservacao() {
   });
 
   const [carregando, setCarregando] = useState(false);
+  console.log("IMGBB ENV:", process.env.NEXT_PUBLIC_IMGBB_API_KEY);
 
-  const IMGBB_API_KEY = process.env.NEXT_PUBLIC_IMGBB_KEY;
+  const IMGBB_API_KEY = process.env.NEXT_PUBLIC_IMGBB_API_KEY;
 
   const salvarRegistro = async (e: React.FormEvent) => {
     e.preventDefault();
