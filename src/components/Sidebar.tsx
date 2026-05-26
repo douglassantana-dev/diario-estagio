@@ -8,6 +8,7 @@ import {
   FileText,
   Settings,
   LogOut,
+  Sparkles,
 } from "lucide-react";
 
 import {
@@ -92,6 +93,14 @@ export default function Sidebar() {
           >
             <FileText size={20} />
             Relatórios
+          </Link>
+
+          <Link
+            href="/relatorio-ia"
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white/10 transition-all"
+          >
+            <Sparkles size={20} className="text-purple-400" />
+            Relatório IA
           </Link>
 
           <Link
