@@ -25,6 +25,7 @@ export default function RelatoriosPage() {
   const [dados, setDados] = useState<Observacao[]>([]);
   const [busca, setBusca] = useState("");
   const [carregando, setCarregando] = useState(true);
+  const [filtroAba, setFiltroAba] = useState("todas");
 
   useEffect(() => {
     async function carregarDados() {
@@ -71,11 +72,26 @@ export default function RelatoriosPage() {
     }
   }
 
-  const filtrados = dados.filter((item) =>
-    item.relato.toLowerCase().includes(busca.toLowerCase()) ||
-    item.turma.toLowerCase().includes(busca.toLowerCase()) ||
-    item.categoria.toLowerCase().includes(busca.toLowerCase())
-  );
+  const filtrados = dados.filter((item) => {
+    const bateComBusca =
+      item.relato.toLowerCase().includes(busca.toLowerCase()) ||
+      item.turma.toLowerCase().includes(busca.toLowerCase()) ||
+      item.categoria.toLowerCase().includes(busca.toLowerCase());
+
+    let bateComAba = true;
+    if (filtroAba === "institucional") {
+      bateComAba = item.turma === "institucional" || item.categoria === "infraestrutura";
+    } else if (filtroAba === "documentos") {
+      bateComAba = item.categoria === "documentos";
+    } else if (filtroAba === "salas") {
+      bateComAba =
+        item.turma !== "institucional" &&
+        item.categoria !== "documentos" &&
+        item.categoria !== "infraestrutura";
+    }
+
+    return bateComBusca && bateComAba;
+  });
 
   return (
     <ProtectedRoute>
@@ -88,6 +104,50 @@ export default function RelatoriosPage() {
             <p className="text-stone-400 mt-2">
               Histórico completo das observações.
             </p>
+          </div>
+
+          {/* BOTÕES DE FILTRO POR ABAS */}
+          <div className="flex flex-wrap gap-3 mb-6">
+            <button
+              onClick={() => setFiltroAba("todas")}
+              className={`px-5 py-2 rounded-xl text-sm font-medium transition-all ${
+                filtroAba === "todas"
+                  ? "bg-rose-500 text-white"
+                  : "bg-white/5 text-stone-400 hover:bg-white/10"
+              }`}
+            >
+              Todas
+            </button>
+            <button
+              onClick={() => setFiltroAba("salas")}
+              className={`px-5 py-2 rounded-xl text-sm font-medium transition-all ${
+                filtroAba === "salas"
+                  ? "bg-blue-500 text-white"
+                  : "bg-white/5 text-stone-400 hover:bg-white/10"
+              }`}
+            >
+              Salas de Aula
+            </button>
+            <button
+              onClick={() => setFiltroAba("institucional")}
+              className={`px-5 py-2 rounded-xl text-sm font-medium transition-all ${
+                filtroAba === "institucional"
+                  ? "bg-purple-500 text-white"
+                  : "bg-white/5 text-stone-400 hover:bg-white/10"
+              }`}
+            >
+              Institucional / Infra
+            </button>
+            <button
+              onClick={() => setFiltroAba("documentos")}
+              className={`px-5 py-2 rounded-xl text-sm font-medium transition-all ${
+                filtroAba === "documentos"
+                  ? "bg-teal-500 text-white"
+                  : "bg-white/5 text-stone-400 hover:bg-white/10"
+              }`}
+            >
+              Documentos
+            </button>
           </div>
 
           <input
